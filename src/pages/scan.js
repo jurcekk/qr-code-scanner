@@ -49,11 +49,14 @@ export default function Scan() {
             <Scanner
               onScan={(result) => {
                 console.log(result);
+                alert(JSON.stringify(result, null, 2));
                 setData(result);
               }}
               classNames='lg:h-[400px] lg:w-[400px] h-[300px] w-[300px]'
             />
-            <span className='flex flex-wrap'>{JSON.stringify(data)}</span>
+            <span className='flex flex-wrap text-wrap'>
+              {JSON.stringify(data, null, 2)}
+            </span>
             {/* <QrReader
               className='lg:h-[400px] lg:w-[400px] h-[300px] w-[300px]'
               onResult={handleScan}
