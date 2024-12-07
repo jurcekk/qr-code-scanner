@@ -29,8 +29,14 @@ export default function Scan() {
     router.reload();
   };
 
-  const handleOK = async () => {
-    await axios.post(`/api/postData`, { data });
+  const handleOK = async (url) => {
+    const res = await axios.get(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    });
+    alert(JSON.stringify(res, null, 2));
     router.reload();
   };
 
@@ -50,20 +56,10 @@ export default function Scan() {
               onScan={(result) => {
                 console.log(result);
                 alert(JSON.stringify(result, null, 2));
-                setData(result);
+                handleOK(result[0].rawValue);
               }}
               classNames='lg:h-[400px] lg:w-[400px] h-[300px] w-[300px]'
             />
-            <span className='flex flex-wrap text-wrap'>
-              {JSON.stringify(data, null, 2)}
-            </span>
-            {/* <QrReader
-              className='lg:h-[400px] lg:w-[400px] h-[300px] w-[300px]'
-              onResult={handleScan}
-              constraints={{ facingMode: 'environment' }}
-              style={{ width: '40%', height: '40%' }}
-              ref={qrRef}
-            /> */}
           </div>
           <Link
             href={`/`}
