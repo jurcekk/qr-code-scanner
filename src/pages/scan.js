@@ -49,10 +49,11 @@ export default function Scan() {
             <Scanner
               onScan={(result) => {
                 console.log(result);
-                alert(result);
+                setData(result);
               }}
               classNames='lg:h-[400px] lg:w-[400px] h-[300px] w-[300px]'
             />
+            <span>{JSON.stringify(data)}</span>
             {/* <QrReader
               className='lg:h-[400px] lg:w-[400px] h-[300px] w-[300px]'
               onResult={handleScan}
