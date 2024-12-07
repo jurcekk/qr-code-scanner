@@ -47,7 +47,10 @@ export default function Scan() {
           <h1 className='text-4xl font-bold mb-4'>QR Scanner</h1>
           <div>
             <Scanner
-              onScan={(result) => console.log(result)}
+              onScan={(result) => {
+                console.log(result);
+                alert(result);
+              }}
               classNames='lg:h-[400px] lg:w-[400px] h-[300px] w-[300px]'
             />
             {/* <QrReader
