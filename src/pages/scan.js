@@ -62,22 +62,31 @@ export default function Scan() {
             Back to home..
           </Link>
           {showModal && (
-            <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
-              <div className='bg-white rounded-md p-4'>
+            <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4'>
+              <div className='bg-white rounded-md p-6 max-w-md w-full max-h-[80vh] overflow-auto'>
                 <p className='text-xl font-bold mb-2'>Scanned data:</p>
-                <p>{data}</p>
-                <button
-                  className='bg-gray-200 text-gray-800 px-4 py-2 rounded-md mt-4 hover:bg-gray-300'
-                  onClick={handleCloseModal}
-                >
-                  Close
-                </button>
-                <button
-                  className='bg-gray-200 text-gray-800 px-4 py-2 rounded-md mx-4 mt-4 hover:bg-gray-300'
-                  onClick={handleOK}
-                >
-                  Ok
-                </button>
+                <p className='text-sm break-all bg-gray-100 p-3 rounded-md mb-4 max-h-40 overflow-y-auto'>
+                  {data.length > 150 ? `${data.substring(0, 150)}...` : data}
+                </p>
+                {data.length > 150 && (
+                  <p className='text-xs text-gray-500 mb-2'>
+                    Showing first 150 characters of {data.length} total
+                  </p>
+                )}
+                <div className='flex gap-2'>
+                  <button
+                    className='bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 flex-1'
+                    onClick={handleCloseModal}
+                  >
+                    Close
+                  </button>
+                  <button
+                    className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex-1'
+                    onClick={handleOK}
+                  >
+                    Ok
+                  </button>
+                </div>
               </div>
             </div>
           )}
