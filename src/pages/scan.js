@@ -1,5 +1,4 @@
-import React, { useState, useRef } from 'react';
-import { QrReader } from 'react-qr-reader';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -10,34 +9,27 @@ export default function Scan() {
   const router = useRouter();
   const [data, setData] = useState('No result');
   const [showModal, setShowModal] = useState(false);
-  const qrRef = useRef(null);
-
-  const handleScan = (result, error) => {
-    if (!!result) {
-      setData(result?.text);
-      setShowModal(true);
-      qrRef.current.stop();
-    }
-
-    if (!!error) {
-      console.info(error);
-    }
-  };
 
   const handleCloseModal = () => {
     setShowModal(false);
     router.reload();
   };
 
-  const handleOK = async (url) => {
-    const res = await axios.get(url, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    });
-    alert(JSON.stringify(res, null, 2));
-    router.reload();
+  const handleOK = async () => {
+    try {
+      const res = await axios.get(data, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      });
+      alert(JSON.stringify(res, null, 2));
+      setShowModal(false);
+      router.reload();
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('Error fetching data: ' + error.message);
+    }
   };
 
   return (
@@ -54,8 +46,11 @@ export default function Scan() {
           <div>
             <Scanner
               onScan={(result) => {
-                console.log(result);
-                handleOK(result[0].rawValue);
+                if (result && result[0]) {
+                  console.log(result);
+                  setData(result[0].rawValue);
+                  setShowModal(true);
+                }
               }}
               classNames='lg:h-[400px] lg:w-[400px] h-[300px] w-[300px]'
             />

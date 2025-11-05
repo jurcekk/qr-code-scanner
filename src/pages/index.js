@@ -22,7 +22,7 @@ export default function Home() {
             href={`/generate`}
             className=" bg-orange-200 m-4 text-4xl rounded-md px-4 py-2 hover:bg-green-400"
           >
-            QR Genarate
+            QR Generate
           </Link>
         </div>
       </main>
