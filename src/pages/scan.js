@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -7,28 +7,22 @@ import { Scanner } from '@yudiel/react-qr-scanner';
 
 export default function Scan() {
   const router = useRouter();
-  const [data, setData] = useState('No result');
-  const [showModal, setShowModal] = useState(false);
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    router.reload();
-  };
-
-  const handleOK = async () => {
+  const handleScan = async (scannedData) => {
     try {
-      const res = await axios.get(data, {
+      console.log('Scanned data:', scannedData);
+      const res = await axios.get(scannedData, {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
       });
       alert(JSON.stringify(res, null, 2));
-      setShowModal(false);
       router.reload();
     } catch (error) {
       console.error('Error fetching data:', error);
       alert('Error fetching data: ' + error.message);
+      router.reload();
     }
   };
 
@@ -47,9 +41,7 @@ export default function Scan() {
             <Scanner
               onScan={(result) => {
                 if (result && result[0]) {
-                  console.log(result);
-                  setData(result[0].rawValue);
-                  setShowModal(true);
+                  handleScan(result[0].rawValue);
                 }
               }}
               classNames='lg:h-[400px] lg:w-[400px] h-[300px] w-[300px]'
@@ -61,35 +53,6 @@ export default function Scan() {
           >
             Back to home..
           </Link>
-          {showModal && (
-            <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4'>
-              <div className='bg-white rounded-md p-6 max-w-md w-full max-h-[80vh] overflow-auto'>
-                <p className='text-xl font-bold mb-2'>Scanned data:</p>
-                <p className='text-sm break-all bg-gray-100 p-3 rounded-md mb-4 max-h-40 overflow-y-auto'>
-                  {data.length > 150 ? `${data.substring(0, 150)}...` : data}
-                </p>
-                {data.length > 150 && (
-                  <p className='text-xs text-gray-500 mb-2'>
-                    Showing first 150 characters of {data.length} total
-                  </p>
-                )}
-                <div className='flex gap-2'>
-                  <button
-                    className='bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 flex-1'
-                    onClick={handleCloseModal}
-                  >
-                    Close
-                  </button>
-                  <button
-                    className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex-1'
-                    onClick={handleOK}
-                  >
-                    Ok
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </main>
     </>
